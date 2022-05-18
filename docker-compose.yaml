@@ -8,6 +8,11 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/rootfs:ro
+      - /date:/data
+      - /data2:/data2
+      - /hdd:/hdd
+      - /old-home:/old-home
+      - /older-home:/older-home
     command: 
       - '--path.procfs=/host/proc' 
       - '--path.sysfs=/host/sys'
