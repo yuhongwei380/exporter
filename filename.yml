@@ -4,3 +4,7 @@ process_names:
     - nebula-metad
     - nebula-storaged
     - nebula-graphd
+#process_names:
+  #- name: "nebula-dev-86-{{.Username}}"
+  #  cmdline:
+  #  - '.+'
