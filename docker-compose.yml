@@ -12,7 +12,15 @@ services:
       - '--path.rootfs=/rootfs'
       - --collector.filesystem.ignored-mount-points
       - "^/(sys|proc|dev|host|etc|run|boot|rootfs/var/lib/|var|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
-      
+   
     network_mode: host
     restart: always
     privileged: true
+
+    smartctl-exporter:
+    image: prometheuscommunity/smartctl-exporter
+    privileged: true
+    network_mode: host
+    user: root
+    ports:
+      - "9633:9633"
