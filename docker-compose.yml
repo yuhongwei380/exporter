@@ -19,7 +19,6 @@ services:
   smartctl-exporter:
     image: prometheuscommunity/smartctl-exporter
     privileged: true
-    network_mode: host
     user: root
     ports:
       - "9633:9633"
