@@ -12,7 +12,6 @@ services:
       - '--path.rootfs=/rootfs'
       - --collector.filesystem.ignored-mount-points
       - "^/(sys|proc|dev|host|etc|run|boot|rootfs/var/lib/|var|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
-   
     network_mode: host
     restart: always
     privileged: true
