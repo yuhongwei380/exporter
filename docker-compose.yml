@@ -17,7 +17,7 @@ services:
     restart: always
     privileged: true
 
-    smartctl-exporter:
+  smartctl-exporter:
     image: prometheuscommunity/smartctl-exporter
     privileged: true
     network_mode: host
