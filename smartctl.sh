@@ -51,12 +51,26 @@ for disk in ${device_list}; do
 
   disk="${device##*/}"
 
+  #-------------------------全局通用指标-------------------------
+  value_device="$device"
+  echo "device{device=\"${disk}\"} 1"
 
+    #获取磁盘的model name
+  value_model_name="$(echo "$smartctl_output" | jq -r  '.model_name')"
+  model_name_value=1  #此处1无意义，只是单纯传输，以满足node-exporter采集的要求。
+  echo "model_name{device=\"${disk}\", model_name=\"${value_model_name}\"} ${model_name_value}"
+
+
+
+  #-------------------------全局通用指标-------------------------
+
+  #-------------------------sata设备指标-------------------------
   if [[ "$disk" == sd* ]]; then
   # Mechanical disk (sd*)
   # Parse JSON output from smartctl
   value_temperature="$(echo "$smartctl_output" | jq '.temperature.current')"
   echo "sata_current_temperature{device=\"${disk}\"} ${value_temperature}"
+
 
   # 获取硬盘健康状态
   value_disk_health="$(echo "$smartctl_health" | grep 'result' | awk '{print $6}')"
@@ -73,14 +87,9 @@ for disk in ${device_list}; do
         fi
     # 输出健康状态，使用字符串作为标签
   echo "sata_health{device=\"${disk}\", status=\"${health_status}\"} ${health_value}"
-
-  #获取磁盘的model name
-  value_model_name="$(echo "$smartctl_output" | jq -r  '.model_name')"
-  model_name=1
-  echo "sata_model_name{device=\"${disk}\", model_name=\"${value_model_name}\"} ${model_name}"
   
   #获取磁盘的容量
-  value_User_Capacity="$(echo "$smartctl_output_capacity" | grep "User Capacity" | awk '{print $3}')"
+  value_User_Capacity="$(echo "$smartctl_output_capacity" | grep "User Capacity" | awk '{print $3}'| tr -d ',')"
   User_Capacity=1
   echo "User_Capacity{device=\"${disk}\", User_Capacity=\"${value_User_Capacity}\"} ${User_Capacity}"
 
@@ -95,6 +104,9 @@ for disk in ${device_list}; do
   echo "sata_Offline_Uncorrectable{device=\"${disk}\"} ${value_disk_Offline_Uncorrectable}"
 
 
+
+
+  #-------------------------nvme设备指标-------------------------
   elif [[ "$disk" == nvme* ]]; then
   # NVMe disk (nvme*)
   value_disk_health="$(echo "$smartctl_health" | grep 'result' | awk '{print $6}')"
@@ -115,13 +127,8 @@ for disk in ${device_list}; do
   value_nvme_temperature="$(echo "$smartctl_output" | jq '.temperature.current')"
   echo "nvme_current_temperature{device=\"${disk}\"} ${value_nvme_temperature}"
 
-  #获取磁盘的model name
-  value_nvme_model_name="$(echo "$smartctl_output" | jq -r  '.model_name')"
-  nvme_model_name=1
-  echo "nvme_model_name{device=\"${disk}\", model_name=\"${value_nvme_model_name}\"} ${nvme_model_name}"
-
   # #获取磁盘的容量
-  value_nvme_User_Capacity="$(echo "$smartctl_output_capacity" | grep "Total NVM Capacity"  | awk '{print $4}')"
+  value_nvme_User_Capacity="$(echo "$smartctl_output_capacity" | grep "Total NVM Capacity"  | awk '{print $4}'| tr -d ',')"
   nvme_User_Capacity=1
   echo "User_Capacity{device=\"${disk}\", User_Capacity=\"${value_nvme_User_Capacity}\"} ${nvme_User_Capacity}"
 
@@ -167,5 +174,7 @@ for disk in ${device_list}; do
 
   value_host_write_commands="$(echo "$smartctl_output" | jq '.nvme_smart_health_information_log.host_writes')"
   echo "nvme_host_write_commands_total{device=\"${disk}\"} ${value_host_write_commands}"
+
   fi
+
 done | format_output
