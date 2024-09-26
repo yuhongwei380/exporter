@@ -15,10 +15,10 @@ set -eu
 export LC_ALL=C
 
 # Check if we are root
-if [ "$EUID" -ne 0 ]; then
-  echo "${0##*/}: Please run as root!" >&2
-  exit 1
-fi
+# if [ "$EUID" -ne 0 ]; then
+#   echo "${0##*/}: Please run as root!" >&2
+#   exit 1
+# fi
 
 output_format_awk="$(
   cat <<'OUTPUTAWK'
@@ -47,6 +47,7 @@ for disk in ${device_list}; do
   device="/dev/${disk}"
   smartctl_output="$(smartctl -a -j ${device})"
   smartctl_health="$(smartctl -H ${device})"
+  smartctl_output_capacity="$(smartctl -i ${device})"
 
   disk="${device##*/}"
 
@@ -57,12 +58,7 @@ for disk in ${device_list}; do
   value_temperature="$(echo "$smartctl_output" | jq '.temperature.current')"
   echo "sata_current_temperature{device=\"${disk}\"} ${value_temperature}"
 
-#   value_model_name="$(echo "$smartctl_output" | jq -r  '.model_name')"
-#   echo "sata_model_name{device=\"${disk}\"} ${value_model_name}"
-
-#   value_disk_health="$(echo "$smartctl_health" | grep 'result' | awk '{print $6}')"
-#   echo "sata_health{device=\"${disk}\"} ${value_disk_health}"
-# 获取硬盘健康状态
+  # 获取硬盘健康状态
   value_disk_health="$(echo "$smartctl_health" | grep 'result' | awk '{print $6}')"
     # 设置健康状态和对应的值
         if [[ "$value_disk_health" == "PASSED" ]]; then
@@ -78,6 +74,14 @@ for disk in ${device_list}; do
     # 输出健康状态，使用字符串作为标签
   echo "sata_health{device=\"${disk}\", status=\"${health_status}\"} ${health_value}"
 
+  #获取磁盘的model name
+  value_model_name="$(echo "$smartctl_output" | jq -r  '.model_name')"
+  model_name=1
+  echo "sata_model_name{device=\"${disk}\", model_name=\"${value_model_name}\"} ${model_name}"
+  
+  #获取磁盘的容量
+  value_User_Capacity="$(echo "$smartctl_output_capacity" | grep "User Capacity" | awk '{print $3}')"
+  echo "sata_User_Capacity{device=\"${disk}\"} ${value_User_Capacity}"
 
   value_disk_Power_On_Hours="$(echo "$smartctl_output" | jq '.ata_smart_attributes.table[] | select(.id == 9) | .raw.value')"
   echo "sata_Power_On_Hours{device=\"${disk}\"} ${value_disk_Power_On_Hours}"
@@ -92,11 +96,32 @@ for disk in ${device_list}; do
 
   elif [[ "$disk" == nvme* ]]; then
   # NVMe disk (nvme*)
+  value_disk_health="$(echo "$smartctl_health" | grep 'result' | awk '{print $6}')"
+    # 设置健康状态和对应的值
+        if [[ "$value_disk_health" == "PASSED" ]]; then
+        health_status="PASSED"
+        health_value=1
+        elif [[ "$value_disk_health" == "FAILED" ]]; then
+        health_status="FAILED"
+        health_value=0
+        else
+        health_status="UNKNOWN"
+        health_value=0  # 其他情况也设为 0
+        fi
+    # 输出健康状态，使用字符串作为标签
+  echo "nvme_health{device=\"${disk}\", status=\"${health_status}\"} ${health_value}"
+
   value_nvme_temperature="$(echo "$smartctl_output" | jq '.temperature.current')"
   echo "nvme_current_temperature{device=\"${disk}\"} ${value_nvme_temperature}"
 
-#   value_nvme_model_name="$(echo "$smartctl_output" | jq -r '.model_name')"
-#   echo "nvme_model_name{device=\"${disk}\"} ${value_nvme_model_name}"
+  #获取磁盘的model name
+  value_nvme_model_name="$(echo "$smartctl_output" | jq -r  '.model_name')"
+  nvme_model_name=1
+  echo "nvme_model_name{device=\"${disk}\", model_name=\"${value_nvme_model_name}\"} ${nvme_model_name}"
+
+  #获取磁盘的容量
+  value_nvme_User_Capacity="$(echo "$smartctl_output_capacity" | grep "Total NVM Capacity"  | awk '{print $4}')"
+  echo "nvme_User_Capacity{device=\"${disk}\"} ${value_nvme_User_Capacity}"
 
   value_power_on_time="$(echo "$smartctl_output" | jq '.power_on_time.hours')"
   echo "nvme_disk_power_on_time{device=\"${disk}\"} ${value_power_on_time}"
