@@ -81,7 +81,8 @@ for disk in ${device_list}; do
   
   #获取磁盘的容量
   value_User_Capacity="$(echo "$smartctl_output_capacity" | grep "User Capacity" | awk '{print $3}')"
-  echo "sata_User_Capacity{device=\"${disk}\"} ${value_User_Capacity}"
+  User_Capacity=1
+  echo "User_Capacity{device=\"${disk}\", User_Capacity=\"${value_User_Capacity}\"} ${User_Capacity}"
 
   value_disk_Power_On_Hours="$(echo "$smartctl_output" | jq '.ata_smart_attributes.table[] | select(.id == 9) | .raw.value')"
   echo "sata_Power_On_Hours{device=\"${disk}\"} ${value_disk_Power_On_Hours}"
@@ -119,9 +120,11 @@ for disk in ${device_list}; do
   nvme_model_name=1
   echo "nvme_model_name{device=\"${disk}\", model_name=\"${value_nvme_model_name}\"} ${nvme_model_name}"
 
-  #获取磁盘的容量
+  # #获取磁盘的容量
   value_nvme_User_Capacity="$(echo "$smartctl_output_capacity" | grep "Total NVM Capacity"  | awk '{print $4}')"
-  echo "nvme_User_Capacity{device=\"${disk}\"} ${value_nvme_User_Capacity}"
+  nvme_User_Capacity=1
+  echo "User_Capacity{device=\"${disk}\", User_Capacity=\"${value_nvme_User_Capacity}\"} ${nvme_User_Capacity}"
+
 
   value_power_on_time="$(echo "$smartctl_output" | jq '.power_on_time.hours')"
   echo "nvme_disk_power_on_time{device=\"${disk}\"} ${value_power_on_time}"
