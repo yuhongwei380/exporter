@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo apt install jq nvme-cli smartmontools -y
+sudo apt install jq  smartmontools -y  # nvme-cli
 sudo mkdir -p /var/lib/node_exporter/textfile_collector
 sudo chmod a+x /opt/exporter/*.sh
 #sudo touch /var/lib/node_exporter/textfile_collector/smartmon.prom
