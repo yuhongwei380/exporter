@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
-#
-# Dependencies: nvme-cli, jq (packages)
-# Based on code from
-# - https://github.com/prometheus/node_exporter/blob/master/text_collector_examples/smartmon.sh
-# - https://github.com/prometheus/node_exporter/blob/master/text_collector_examples/mellanox_hca_temp
-# - https://github.com/vorlon/check_nvme/blob/master/check_nvme.sh
-#
-# Author: Henk <henk@wearespindle.com>
 
-set -eu
+
+#set -eu
 #set -x    #debug mode
 
 # Ensure predictable numeric / date formats, etc.
