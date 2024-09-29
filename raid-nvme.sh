@@ -192,6 +192,7 @@ for device in ${device_list}; do
   scsi) /usr/sbin/smartctl -A -d "${type}" "${disk}" | parse_smartctl_scsi_attributes "${disk}" "${type}" ;;
   megaraid*) /usr/sbin/smartctl -A -d "${type}" "${disk}" | parse_smartctl_scsi_attributes "${disk}" "${type}" ;;
   nvme*)
+    
     smartctl_output="$(smartctl -a -j ${disk})"
     smartctl_health="$(smartctl -H ${disk})"
     smartctl_output_capacity="$(smartctl -i ${disk})"
@@ -228,7 +229,7 @@ for device in ${device_list}; do
     echo "nvme_current_temperature{device=\"${disk}\"} ${value_nvme_temperature}"
 
     # 获取磁盘的容量
-    value_User_Capacity="$(echo "$smartctl_output_capacity" | grep "Namespace 1 Size/Capacity"  | awk '{print $4}'| tr -d ',')"
+    value_User_Capacity="$(echo "$smartctl_output_capacity" | grep -E "Total NVM Capacity"  | awk '{print $4}'| tr -d ',')"
     nvme_User_Capacity=1
     echo "User_Capacity{device=\"${disk}\", User_Capacity=\"${value_User_Capacity}\"} ${nvme_User_Capacity}"
 

@@ -53,8 +53,6 @@ for disk in ${device_list}; do
   model_name_value=1  #此处1无意义，只是单纯传输，以满足node-exporter采集的要求。
   echo "model_name{device=\"${disk}\", model_name=\"${value_model_name}\"} ${model_name_value}"
 
-
-
   #-------------------------全局通用指标-------------------------
 
   #-------------------------sata设备指标-------------------------
