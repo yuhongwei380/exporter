@@ -121,7 +121,7 @@ for disk in ${device_list}; do
   echo "nvme_current_temperature{device=\"${disk}\"} ${value_nvme_temperature}"
 
   # #获取磁盘的容量
-  value_nvme_User_Capacity="$(echo "$smartctl_output_capacity" | grep "Total NVM Capacity"  | awk '{print $4}'| tr -d ',')"
+  value_nvme_User_Capacity="$(echo "$smartctl_output_capacity" | grep "Capacity"  | awk '{print $4}'| tr -d ',')"
   nvme_User_Capacity=1
   echo "User_Capacity{device=\"${disk}\", User_Capacity=\"${value_nvme_User_Capacity}\"} ${nvme_User_Capacity}"
 
