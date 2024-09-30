@@ -90,7 +90,7 @@ for disk in ${device_list}; do
   #Reallocated_Sector_Ct：这是已经重新分配的扇区的数量。如果该值不为0，则磁盘存在坏扇区。正常情况的RAW_VALUE为0
   value_disk_Reallocated_Sector_Ct="$(echo "$smartctl_output" | jq '.ata_smart_attributes.table[] | select(.id == 5) | .raw.value')"
   echo "sata_Reallocated_Sector_Ct{device=\"${disk}\"} ${value_disk_Reallocated_Sector_Ct}"
-
+  #部分磁盘没有这个参数，需要注释
   value_disk_Offline_Uncorrectable="$(echo "$smartctl_output" | jq '.ata_smart_attributes.table[] | select(.id == 198) | .raw.value')"
   echo "sata_Offline_Uncorrectable{device=\"${disk}\"} ${value_disk_Offline_Uncorrectable}"
 
