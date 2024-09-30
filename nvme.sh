@@ -6,7 +6,7 @@
 
 # Ensure predictable numeric / date formats, etc.
 export LC_ALL=C
-
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 # Check if we are root
 # if [ "$EUID" -ne 0 ]; then
 #   echo "${0##*/}: Please run as root!" >&2
