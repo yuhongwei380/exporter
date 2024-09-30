@@ -6,7 +6,7 @@
 
 # Ensure predictable numeric / date formats, etc.
 export LC_ALL=C
-
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 # Check if we are root
 # if [ "$EUID" -ne 0 ]; then
 #   echo "${0##*/}: Please run as root!" >&2
@@ -119,9 +119,9 @@ for disk in ${device_list}; do
   echo "nvme_current_temperature{device=\"${disk}\"} ${value_nvme_temperature}"
 
   # #获取磁盘的容量
-  value_User_Capacity="$(echo "$smartctl_output_capacity" | grep "Namespace 1 Size/Capacity"  | awk '{print $4}'| tr -d ',')"
+  value_nvme_User_Capacity="$(echo "$smartctl_output_capacity" | grep "Namespace 1 Size/Capacity"  | awk '{print $4}'| tr -d ',')"
   nvme_User_Capacity=1
-  echo "User_Capacity{device=\"${disk}\", User_Capacity=\"${value_User_Capacity}\"} ${nvme_User_Capacity}"
+  echo "nvme_User_Capacity{device=\"${disk}\", User_Capacity=\"${value_nvme_User_Capacity}\"} ${nvme_User_Capacity}"
 
 
   value_power_on_time="$(echo "$smartctl_output" | jq '.power_on_time.hours')"
