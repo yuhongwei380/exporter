@@ -121,7 +121,7 @@ for disk in ${device_list}; do
   # #获取磁盘的容量
   value_nvme_User_Capacity="$(echo "$smartctl_output_capacity" | grep "Namespace 1 Size/Capacity"  | awk '{print $4}'| tr -d ',')"
   nvme_User_Capacity=1
-  echo "nvme_User_Capacity{device=\"${disk}\", User_Capacity=\"${value_nvme_User_Capacity}\"} ${nvme_User_Capacity}"
+  echo "User_Capacity{device=\"${disk}\", User_Capacity=\"${value_nvme_User_Capacity}\"} ${nvme_User_Capacity}"
 
 
   value_power_on_time="$(echo "$smartctl_output" | jq '.power_on_time.hours')"
