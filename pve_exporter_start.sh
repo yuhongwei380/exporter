@@ -31,5 +31,11 @@ systemctl restart node_exporter.service
 #systemctl status node_exporter.service
 systemctl daemon-reload
 
+
+touch /var/lib/node_exporter/textfile_collector/pve-lvm.prom
 bash /opt/exporter/smartctl.sh > /var/lib/node_exporter/textfile_collector/smartctl.prom
 (crontab -l; echo "*/30 * * * * /opt/exporter/smartctl.sh > /var/lib/node_exporter/textfile_collector/smartctl.prom") | crontab -
+
+touch /var/lib/node_exporter/textfile_collector/smartctl.prom
+sh /opt/exporter/pve-lvm.sh > /var/lib/node_exporter/textfile_collector/pve-lvm.prom
+(crontab -l; echo "*/30 * * * * /opt/exporter/pve-lvm.sh > /var/lib/node_exporter/textfile_collector/pve-lvm.prom") | crontab -
