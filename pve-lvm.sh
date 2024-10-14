@@ -1,5 +1,6 @@
 #!/bin/bash
-
+export LC_ALL=C
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 # 提取逻辑卷名称、Data% 和 Size 字段
 output=$(lvs --noheadings --separator ',' -o lv_name,data_percent,lv_size | grep "vm-data")
 
