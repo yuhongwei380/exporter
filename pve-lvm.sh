@@ -6,9 +6,6 @@ output=$(lvs --noheadings --separator ',' -o lv_name,data_percent,lv_size | grep
 # 指定输出文件路径
 output_file="/var/lib/node_exporter/textfile_collector/pve-lvm.prom"
 
-# 清空输出文件
-> "$output_file"
-
 # 逐行处理输出
 echo "$output" | while IFS=',' read -r lv_name data_percent lv_size; do
   # 去掉前后的空格
