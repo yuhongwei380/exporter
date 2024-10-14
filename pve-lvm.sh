@@ -16,5 +16,5 @@ echo "$output" | while IFS=',' read -r lv_name data_percent lv_size; do
   size_value=$(echo "$size_value * 1000000000000" | bc)
 
   # 格式化为 Prometheus 指标格式
-  echo "lvm_data_percent{lv_name=\"$lv_name\",lv_size=\"$size_value\"} $data_percent" >> "$output_file"
+  echo "lvm_data_percent{lv_name=\"$lv_name\",lv_size=\"$size_value\"} $data_percent" > "$output_file"
 done
