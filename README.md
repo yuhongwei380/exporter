@@ -1,2 +1,5 @@
-##nvme.sh  & nvme-startsh   only can be runed in HDD with Raid
-##other system run smartctl.sh 
+### 1.nvme.sh  & nvme-start.sh   only can be runed in HDD with Raid
+
+### 2.other system run smartctl.sh 
+
+### 3.pve-lvm.sh & pve_exporter_start.sh  can be used in PVE
