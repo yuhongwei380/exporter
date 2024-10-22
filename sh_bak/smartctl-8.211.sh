@@ -6,7 +6,7 @@
 
 # Ensure predictable numeric / date formats, etc.
 export LC_ALL=C
-
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 # Check if we are root
 # if [ "$EUID" -ne 0 ]; then
 #   echo "${0##*/}: Please run as root!" >&2
@@ -53,8 +53,6 @@ for disk in ${device_list}; do
   model_name_value=1  #此处1无意义，只是单纯传输，以满足node-exporter采集的要求。
   echo "model_name{device=\"${disk}\", model_name=\"${value_model_name}\"} ${model_name_value}"
 
-
-
   #-------------------------全局通用指标-------------------------
 
   #-------------------------sata设备指标-------------------------
@@ -93,8 +91,8 @@ for disk in ${device_list}; do
   value_disk_Reallocated_Sector_Ct="$(echo "$smartctl_output" | jq '.ata_smart_attributes.table[] | select(.id == 5) | .raw.value')"
   echo "sata_Reallocated_Sector_Ct{device=\"${disk}\"} ${value_disk_Reallocated_Sector_Ct}"
 
-  value_disk_Offline_Uncorrectable="$(echo "$smartctl_output" | jq '.ata_smart_attributes.table[] | select(.id == 198) | .raw.value')"
-  echo "sata_Offline_Uncorrectable{device=\"${disk}\"} ${value_disk_Offline_Uncorrectable}"
+#  value_disk_Offline_Uncorrectable="$(echo "$smartctl_output" | jq '.ata_smart_attributes.table[] | select(.id == 198) | .raw.value')"
+#  echo "sata_Offline_Uncorrectable{device=\"${disk}\"} ${value_disk_Offline_Uncorrectable}"
 
 
 
@@ -121,9 +119,9 @@ for disk in ${device_list}; do
   echo "nvme_current_temperature{device=\"${disk}\"} ${value_nvme_temperature}"
 
   # #获取磁盘的容量
-  value_User_Capacity="$(echo "$smartctl_output_capacity" | grep "Namespace 1 Size/Capacity"  | awk '{print $4}'| tr -d ',')"
+  value_nvme_User_Capacity="$(echo "$smartctl_output_capacity" | grep "Namespace 1 Size/Capacity"  | awk '{print $4}'| tr -d ',')"
   nvme_User_Capacity=1
-  echo "User_Capacity{device=\"${disk}\", User_Capacity=\"${value_User_Capacity}\"} ${nvme_User_Capacity}"
+  echo "User_Capacity{device=\"${disk}\", User_Capacity=\"${value_nvme_User_Capacity}\"} ${nvme_User_Capacity}"
 
 
   value_power_on_time="$(echo "$smartctl_output" | jq '.power_on_time.hours')"
