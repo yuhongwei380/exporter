@@ -37,5 +37,5 @@ bash /opt/exporter/smartctl.sh > /var/lib/node_exporter/textfile_collector/smart
 (crontab -l; echo "*/30 * * * * bash /opt/exporter/smartctl.sh > /var/lib/node_exporter/textfile_collector/smartctl.prom") | crontab -
 
 touch /var/lib/node_exporter/textfile_collector/smartctl.prom
-bash /opt/exporter/pve-lvm.sh # /var/lib/node_exporter/textfile_collector/pve-lvm.prom
+bash /opt/exporter/pve_smartctl.sh # /var/lib/node_exporter/textfile_collector/pve-lvm.prom
 (crontab -l; echo "*/30 * * * * bash /opt/exporter/pve-lvm.sh > /var/lib/node_exporter/textfile_collector/pve-lvm.prom") | crontab -
