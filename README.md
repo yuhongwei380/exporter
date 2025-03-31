@@ -2,4 +2,4 @@
 
 ### 2.other system run smartctl.sh 
 
-### 3.pve-lvm.sh & pve_exporter_start.sh  can be used in PVE
+### 3.pve-smartctl.sh & pve_exporter_start.sh  can be used in PVE
