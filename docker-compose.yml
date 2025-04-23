@@ -22,10 +22,3 @@ services:
         limits:
           cpus: '0.1'   # 限制使用最多 10% 的 CPU
           memory: 256M   # 限制使用最多 256MB 的内存
-
-  # smartctl-exporter:
-  #   image: prometheuscommunity/smartctl-exporter
-  #   privileged: true
-  #   user: root
-  #   ports:
-  #     - "9633:9633"
