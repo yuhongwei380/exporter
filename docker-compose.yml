@@ -1,8 +1,9 @@
-version: '3.7'
 services:
   node-exporter:
     container_name: node-exporter
     image: prom/node-exporter
+    ports:
+      - "9300:9100"
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -13,15 +14,13 @@ services:
       - '--path.sysfs=/host/sys'
       - '--path.rootfs=/rootfs'
       - --collector.filesystem.ignored-mount-points
-      - "^/(sys|proc|dev|host|etc|run|boot|rootfs/var/lib/|var|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+      - "^/(sys|proc|dev|host|etc|run|boot|rootfs/var/lib/|var|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($|/)"
       - --collector.textfile.directory=/var/lib/node_exporter/textfile_collector
     network_mode: host
-    restart: always
+    #restart: always
     privileged: true
-
-  # smartctl-exporter:
-  #   image: prometheuscommunity/smartctl-exporter
-  #   privileged: true
-  #   user: root
-  #   ports:
-  #     - "9633:9633"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'   # 限制使用最多 10% 的 CPU
+          memory: 256M   # 限制使用最多 256MB 的内存
