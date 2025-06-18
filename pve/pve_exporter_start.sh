@@ -3,10 +3,10 @@
 apt install -y wget jq git 
 groupadd prometheus
 useradd -g prometheus -m -d /var/lib/prometheus -s /sbin/nologin prometheus
-wget https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz
-mv node_exporter-1.3.1.linux-amd64.tar.gz  node_exporter.tar.gz
+wget https://github.com/prometheus/node_exporter/releases/download/v1.9.1/node_exporter-1.9.1.linux-amd64.tar.gz
+mv node_exporter-1.9.1.linux-amd64.tar.gz  node_exporter.tar.gz
 tar -xvf node_exporter.tar.gz -C /usr/local/
-mv  /usr/local/node_exporter-1.3.1.linux-amd64   /usr/local/node_exporter
+mv  /usr/local/node_exporter-1.9.1.linux-amd64   /usr/local/node_exporter
 chown -R prometheus.prometheus /usr/local/node_exporter/
 git clone https://github.com/yuhongwei380/exporter.git    /opt/exporter/
 mkdir -p /var/lib/node_exporter/textfile_collector/
@@ -21,6 +21,7 @@ After=network.target
 Type=simple
 User=prometheus
 ExecStart=/usr/local/node_exporter/node_exporter \
+    --web.listen-address=:9101 \
     --collector.textfile.directory="/var/lib/node_exporter/textfile_collector" 
 Restart=on-failure
 [Install]
