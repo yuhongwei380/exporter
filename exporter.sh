@@ -1,8 +1,6 @@
 #!/bin/bash
 # must run as root role 
 apt install -y wget jq git 
-groupadd prometheus
-useradd -g prometheus -m -d /var/lib/prometheus -s /sbin/nologin prometheus
 wget https://github.com/prometheus/node_exporter/releases/download/v1.9.1/node_exporter-1.9.1.linux-amd64.tar.gz
 mv node_exporter-1.9.1.linux-amd64.tar.gz  node_exporter.tar.gz
 tar -xvf node_exporter.tar.gz -C /usr/local/
@@ -32,11 +30,5 @@ systemctl restart node_exporter.service
 #systemctl status node_exporter.service
 systemctl daemon-reload
 
-
-touch /var/lib/node_exporter/textfile_collector/smartctl.prom
 bash /opt/exporter/smartctl.sh > /var/lib/node_exporter/textfile_collector/smartctl.prom
-(crontab -l; echo "*/30 * * * * bash /opt/exporter/smartctl.sh > /var/lib/node_exporter/textfile_collector/smartctl.prom") | crontab -
-
-touch /var/lib/node_exporter/textfile_collector/pve-lvm.prom
-bash /opt/exporter/pve_smartctl.sh # /var/lib/node_exporter/textfile_collector/pve-lvm.prom
-(crontab -l; echo "*/30 * * * * bash /opt/exporter/pve_smartctl.sh > /var/lib/node_exporter/textfile_collector/pve-lvm.prom") | crontab -
+(crontab -l; echo "*/30 * * * * /opt/exporter/smartctl.sh > /var/lib/node_exporter/textfile_collector/smartctl.prom") | crontab -

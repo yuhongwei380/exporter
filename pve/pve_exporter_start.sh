@@ -21,7 +21,6 @@ After=network.target
 Type=simple
 User=prometheus
 ExecStart=/usr/local/node_exporter/node_exporter \
-    --web.listen-address=:9101 \
     --collector.textfile.directory="/var/lib/node_exporter/textfile_collector" 
 Restart=on-failure
 [Install]
