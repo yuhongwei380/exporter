@@ -3,11 +3,11 @@
 # judge the OS version 
 if [ -f /etc/redhat-release ]; then
     echo "Detected CentOS/RHEL, installing wget jq git with yum..."
-    sudo yum install -y wget jq git
+    sudo yum install -y wget jq git smartmontools
 elif [ -f /etc/debian_version ]; then
     echo "Detected Ubuntu/Debian, installing wget jq git with apt..."
     sudo apt update
-    sudo apt install -y wget jq git
+    sudo apt install -y wget jq git smartmontools
 else
     echo "Unsupported OS! Only CentOS/RHEL/Ubuntu/Debian are supported."
     exit 1
