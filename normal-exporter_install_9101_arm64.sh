@@ -13,10 +13,10 @@ else
     exit 1
 fi
 #install node exporter
-wget https://github.com/prometheus/node_exporter/releases/download/v1.9.1/node_exporter-1.9.1.linux-arm64.tar.gz
-tar -xvf node_exporter-1.9.1.linux-arm64.tar.gz -C /root/
+wget https://github.com/prometheus/node_exporter/releases/download/v1.10.2/node_exporter-1.10.2.linux-arm64.tar.gz
+tar -xvf node_exporter-1.10.2.linux-arm64.tar.gz -C /root/
 
-mv  /root/node_exporter-1.9.1.linux-arm64   /root/node_exporter
+mv  /root/node_exporter-1.10.2.linux-arm64   /root/node_exporter
 chown -R prometheus.prometheus /root/node_exporter/
 sudo cp -a /root/node_exporter/node_exporter /usr/local/bin/
 sudo chmod +x /usr/local/bin/node_exporter
