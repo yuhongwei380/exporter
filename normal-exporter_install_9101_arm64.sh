@@ -222,3 +222,6 @@ bash /opt/smartctl.sh > /var/lib/node_exporter/textfile_collector/smartctl.prom
 (crontab -l; echo "*/30 * * * * /opt/smartctl.sh > /var/lib/node_exporter/textfile_collector/smartctl.prom") | crontab -
 
 systemctl status node_exporter.service
+
+systemctl enable node_exporter.service
+
